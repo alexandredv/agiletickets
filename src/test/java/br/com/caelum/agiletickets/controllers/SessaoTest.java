@@ -15,7 +15,7 @@ public class SessaoTest {
 	public void inicializa(){
 		this.sessao = new Sessao();
 		sessao.setTotalIngressos(8);
-		System.out.println("A anotacao @Before é chamada antes dos demais");
+		System.out.println("A anotacao @Before é chamada antes dos demais. O @After somente quando utilizado com acesso a banco");
 	}
 	/**
 	 * @param args

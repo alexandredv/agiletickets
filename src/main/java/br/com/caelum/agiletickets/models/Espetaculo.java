@@ -2,6 +2,7 @@ package br.com.caelum.agiletickets.models;
 
 import static com.google.common.collect.Lists.newArrayList;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -12,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import org.joda.time.Days;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 
@@ -96,37 +98,47 @@ public class Espetaculo {
       * Repare que a data da primeira sessao é sempre a data inicial.
       */
 	public List<Sessao> criaSessoes(LocalDate inicio, LocalDate fim, LocalTime horario, Periodicidade periodicidade) {
-		// ALUNO: Não apague esse metodo. Esse sim será usado no futuro! ;)
 		return null;
 	}
 	
-	public boolean vagas(int qtd, int min)
+	public boolean vagas(int quantidade, int minimoPorSessao)
     {
         // ALUNO: Não apague esse metodo. Esse sim será usado no futuro! ;)
-        int totDisp = 0;
+        int totalDisponivel = 0;
 
         for (Sessao s : sessoes)
         {
-            if (s.getIngressosDisponiveis() < min) return false;
-            totDisp += s.getIngressosDisponiveis();
+            if (s.getIngressosDisponiveis() < minimoPorSessao) return false;
+            totalDisponivel += s.getIngressosDisponiveis();
         }
 
-        if (totDisp >= qtd) return true;
+        if (totalDisponivel >= quantidade) return true;
         else return false;
     }
 
-    public boolean vagas(int qtd)
+    public boolean vagas(int quantidade)
     {
-        // ALUNO: Não apague esse metodo. Esse sim será usado no futuro! ;)
-        int totDisp = 0;
+    	return vagas(quantidade,0);
+    }
+    
+    public int getSessoesNoPeriodo(LocalDate inicio, LocalDate fim, int periodicidade){
+    	if(inicio == null || fim == null){
+    		return 0;
+    	}
+    	
+    	if(inicio.equals(fim)){
+    		return 1;
+    	}
+    	
+		sessoes = new ArrayList<Sessao>();
+		for(int i = 1; i <= Days.daysBetween(inicio, fim).getDays(); i++){
+			if(i == 1 || (i % periodicidade == 0)){
+				Sessao s = new Sessao();
+				sessoes.add(s);
+			}
+		}
 
-        for (Sessao s : sessoes)
-        {
-            totDisp += s.getIngressosDisponiveis();
-        }
-
-        if (totDisp >= qtd) return true;
-        else return false;
+    	return sessoes.size();
     }
 
 }
